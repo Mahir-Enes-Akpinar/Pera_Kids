@@ -49,7 +49,7 @@
                     <p>{{ urun.description|truncatewords:15 }}</p>
                     <div class="urun-fiyati">{{ urun.price }} TL (Seri Fiyatı)</div>
                     <p><strong>Yaş Grubu:</strong> {{ urun.age_group_set }}</p>
-                    <a href="#">Detayları Gör ve İletişime Geç</a>
+                    <a href="{% url 'playground:urun_detay' urun.slug %}">Detayları Gör ve İletişime Geç</a>
                 </li>
             {% endfor %}
             </ul>

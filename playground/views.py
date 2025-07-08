@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Product  # Veritabanından Product modelimizi çağırıyoruz
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Product, Conversation, Message
 
 # Create your views here.
 
@@ -39,3 +40,27 @@ def urun_detay(request, slug):
 
     # render fonksiyonunu yeni şablonumuz olan urun_detay.html'e yönlendiriyoruz.
     return render(request, 'playground/urun_detay.html', context)
+
+@login_required
+def sohbet_baslat(request, product_id):
+    """
+    Giriş yapmış bir kullanıcı ile bir ürün arasında bir sohbet oluşturur
+    veya mevcut olanı bulur, ardından kullanıcıyı sohbetler sayfasına yönlendirir.
+    """
+    # URL'den gelen id ile ürünü buluyoruz. Bulamazsa 404 hatası verir.
+    product = get_object_or_404(Product, id=product_id)
+    
+    # Bu ürün ve şu anki kullanıcı (request.user) arasında bir sohbet arıyoruz.
+    # Eğer yoksa, yeni bir tane oluşturuyoruz. Varsa, mevcut olanı getiriyoruz.
+    # get_or_create() bu işi tek satırda yapar ve bize iki değer döndürür:
+    # 1. nesnenin kendisi (sohbet)
+    # 2. nesnenin yeni mi oluşturulduğu (created - True/False)
+    sohbet, created = Conversation.objects.get_or_create(
+        customer=request.user,
+        product=product
+    )
+
+    # Şimdilik, sohbeti başlattıktan sonra kullanıcıyı ana sayfaya yönlendirelim.
+    # Daha sonra burayı direkt sohbetin kendisine yönlendirecek şekilde güncelleyeceğiz.
+    # TODO: Kullanıcıyı sohbet detay sayfasına yönlendir.
+    return redirect('playground:anasayfa')
