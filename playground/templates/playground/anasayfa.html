@@ -4,36 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pera Kids - Toptan Çocuk Giyim</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; margin: 40px; }
-        h1 { text-align: center; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            min-height: 100vh;
+        }
+        nav {
+            text-align: right;
+            padding: 18px 60px;
+            background: linear-gradient(90deg, #a5b4fc 0%, #f472b6 100%);
+            border-bottom: 1px solid #ddd;
+            color: #fff;
+            font-size: 1.1em;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: #fbbf24;
+        }
+        h1 {
+            text-align: center;
+            margin: 40px 0 30px 0;
+            font-size: 2.5em;
+            color: #4f46e5;
+            letter-spacing: 1px;
+        }
         .urun-listesi {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 32px;
             list-style: none;
-            padding: 0;
+            padding: 0 40px 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .urun-karti {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 16px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px 0 rgba(80, 80, 180, 0.08);
+            padding: 24px 18px 18px 18px;
             text-align: center;
+            transition: transform 0.18s, box-shadow 0.18s;
+            border: none;
+            position: relative;
+        }
+        .urun-karti:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 8px 32px 0 rgba(80, 80, 180, 0.16);
         }
         .urun-karti img {
             max-width: 100%;
-            height: auto;
-            border-radius: 4px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            background: #f3f4f6;
+        }
+        .urun-karti h2 {
+            font-size: 1.25em;
+            color: #6366f1;
+            margin: 10px 0 8px 0;
+            font-weight: 700;
+        }
+        .urun-karti p {
+            color: #64748b;
+            font-size: 1em;
+            margin: 0 0 10px 0;
         }
         .urun-fiyati {
-            font-size: 1.2em;
+            font-size: 1.15em;
             font-weight: bold;
-            color: #2c5e2e;
-            margin-top: 10px;
+            color: #10b981;
+            margin: 12px 0 8px 0;
+            background: #d1fae5;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 8px;
+        }
+        .urun-karti strong {
+            color: #f472b6;
+        }
+        .urun-karti a {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 18px;
+            background: linear-gradient(90deg, #6366f1 0%, #f472b6 100%);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px 0 rgba(100, 116, 139, 0.08);
+        }
+        .urun-karti a:hover {
+            background: linear-gradient(90deg, #f472b6 0%, #6366f1 100%);
+            box-shadow: 0 4px 16px 0 rgba(100, 116, 139, 0.16);
+        }
+        @media (max-width: 700px) {
+            .urun-listesi {
+                grid-template-columns: 1fr;
+                padding: 0 10px 30px 10px;
+            }
+            nav {
+                padding: 14px 10px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <nav>
+    {% if user.is_authenticated %}
+        <span>Hoş geldin, {{ user.username }}!</span>
+    {% else %}
+        <a href="{% url 'playground:hesap' %}">Giriş Yap / Kayıt Ol</a>
+    {% endif %}
+    </nav>
 
     <h1>Mağazamızdaki Ürünler</h1>
 
@@ -44,7 +138,6 @@
                     {% if urun.image %}
                         <img src="{{ urun.image.url }}" alt="{{ urun.name }}">
                     {% endif %}
-                    
                     <h2>{{ urun.name }}</h2>
                     <p>{{ urun.description|truncatewords:15 }}</p>
                     <div class="urun-fiyati">{{ urun.price }} TL (Seri Fiyatı)</div>
@@ -52,9 +145,9 @@
                     <a href="{% url 'playground:urun_detay' urun.slug %}">Detayları Gör ve İletişime Geç</a>
                 </li>
             {% endfor %}
-            </ul>
+        </ul>
     {% else %}
-        <p>Gösterilecek ürün bulunamadı. Lütfen daha sonra tekrar kontrol edin.</p>
+        <p style="text-align:center; color:#64748b; margin-top:40px;">Gösterilecek ürün bulunamadı. Lütfen daha sonra tekrar kontrol edin.</p>
     {% endif %}
 
 </body>

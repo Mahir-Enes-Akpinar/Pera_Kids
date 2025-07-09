@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Conversation, Message
-
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # AuthenticationForm'u ekliyoruz
+from django.contrib.auth import login
+from .forms import CustomUserCreationForm 
 # Create your views here.
 
 def anasayfa(request):
@@ -64,3 +67,31 @@ def sohbet_baslat(request, product_id):
     # Daha sonra burayı direkt sohbetin kendisine yönlendirecek şekilde güncelleyeceğiz.
     # TODO: Kullanıcıyı sohbet detay sayfasına yönlendir.
     return redirect('playground:anasayfa')
+
+
+def hesap_view(request):
+    login_form = AuthenticationForm(request)
+    # Standart form yerine kendi özel formumuzu kullanıyoruz
+    register_form = CustomUserCreationForm()
+
+    if request.method == 'POST':
+        if 'login_submit' in request.POST:
+            login_form = AuthenticationForm(request, data=request.POST)
+            if login_form.is_valid():
+                user = login_form.get_user()
+                login(request, user)
+                return redirect('playground:anasayfa')
+        
+        elif 'register_submit' in request.POST:
+            # Standart form yerine kendi özel formumuzu kullanıyoruz
+            register_form = CustomUserCreationForm(request.POST)
+            if register_form.is_valid():
+                user = register_form.save()
+                login(request, user)
+                return redirect('playground:anasayfa')
+
+    context = {
+        'login_form': login_form,
+        'register_form': register_form
+    }
+    return render(request, 'playground/hesap.html', context)

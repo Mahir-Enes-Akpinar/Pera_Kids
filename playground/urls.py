@@ -16,8 +16,11 @@ urlpatterns = [
     # ve 'slug' adıyla 'urun_detay' view'ına gönderir.
     path('urun/<slug:slug>/', views.urun_detay, name='urun_detay'),
 
-     # Django'nun hazır LoginView'ını kullanıyoruz ve hangi şablonu kullanacağını belirtiyoruz.
-    path('login/', auth_views.LoginView.as_view(template_name='playground/login.html'), name='login'),
+    
+    
 
     path('sohbet-baslat/<int:product_id>/', views.sohbet_baslat, name='sohbet_baslat'),
+
+    
+    path('hesap/', views.hesap_view, name='hesap'),
 ]
