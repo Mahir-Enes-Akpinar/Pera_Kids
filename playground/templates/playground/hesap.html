@@ -6,6 +6,7 @@
 {% block body_class %}hesap-sayfasi-govde{% endblock %}
 
 {% block content %}
+<!-- Sadece bir ana container -->
 <div class="hesap-form-konteyner">
     <div class="main-title">Hesap İşlemleri</div>
     <div class="tab-controls">
@@ -39,15 +40,15 @@
                 <div class="form-errors">{{ register_form.errors }}</div>
             {% endif %}
             <div class="field floating-label-field">
-                {{ register_form.username }}
+                <input type="text" name="username" id="id_username" placeholder=" " required>
                 <label for="id_username">Kullanıcı Adı</label>
             </div>
             <div class="field floating-label-field">
-                {{ register_form.password1 }}
+                <input type="password" name="password1" id="id_password1" placeholder=" " required>
                 <label for="id_password1">Şifre</label>
             </div>
             <div class="field floating-label-field">
-                {{ register_form.password2 }}
+                <input type="password" name="password2" id="id_password2" placeholder=" " required>
                 <label for="id_password2">Şifreyi Doğrula</label>
             </div>
             <div class="btn">
@@ -56,8 +57,8 @@
         </form>
     </div>
 </div>
-    // Bu sayfaya özel script burada kalabilir veya harici bir .js dosyasına taşınabilir.
-    // Şimdilik burada kalması sorun yaratmaz.
+
+<script>
     const loginTab = document.getElementById('loginTab');
     const signupTab = document.getElementById('signupTab');
     const loginSection = document.getElementById('loginSection');
@@ -79,4 +80,3 @@
 </script>
 {% endblock %}
 
-{% block extra_css %}

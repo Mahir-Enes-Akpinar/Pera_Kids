@@ -275,6 +275,110 @@ a.contact-button:hover {
     margin-bottom: 22px; position: relative;
 }
 
+/* Hesap sayfası formu için modern ve uyumlu input, label ve buton stilleri */
+.hesap-form-konteyner input[type="text"],
+.hesap-form-konteyner input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.08em;
+    margin-bottom: 8px;
+    background: #f7faff;
+    color: var(--text-color);
+    transition: border-color 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+.hesap-form-konteyner input[type="text"]:focus,
+.hesap-form-konteyner input[type="password"]:focus {
+    border-color: var(--primary-color);
+    background: #fff;
+}
+.hesap-form-konteyner label {
+    font-size: 1em;
+    color: #6a89cc;
+    margin-bottom: 4px;
+    margin-left: 2px;
+    display: block;
+    font-weight: 500;
+}
+.hesap-form-konteyner .btn {
+    margin-top: 18px;
+}
+.hesap-form-konteyner .contact-button {
+    width: 100%;
+    font-size: 1.1em;
+    padding: 12px 0;
+    margin-top: 0;
+}
+.hesap-form-konteyner .pass-link {
+    margin-bottom: 8px;
+    text-align: right;
+}
+.hesap-form-konteyner .pass-link a {
+    color: #7c4dff;
+    font-size: 0.98em;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+.hesap-form-konteyner .pass-link a:hover {
+    color: var(--primary-color);
+}
+.hesap-form-konteyner .form-errors {
+    background: #ffe0e6;
+    color: #d72660;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 0.98em;
+    text-align: center;
+}
+.hesap-form-konteyner .floating-label-field {
+    position: relative;
+    margin-bottom: 22px;
+}
+.hesap-form-konteyner .floating-label-field input[type="text"],
+.hesap-form-konteyner .floating-label-field input[type="password"] {
+    width: 100%;
+    padding: 16px 14px 16px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.08em;
+    background: #f7faff;
+    color: var(--text-color);
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+.hesap-form-konteyner .floating-label-field input[type="text"]:focus,
+.hesap-form-konteyner .floating-label-field input[type="password"]:focus {
+    border-color: var(--primary-color);
+    background: #fff;
+}
+.hesap-form-konteyner .floating-label-field label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    color: #6a89cc;
+    font-size: 1em;
+    pointer-events: none;
+    transition: 0.2s cubic-bezier(.4,0,.2,1);
+    padding: 0 4px;
+    font-weight: 500;
+}
+.hesap-form-konteyner .floating-label-field input:focus + label,
+.hesap-form-konteyner .floating-label-field input:not(:placeholder-shown) + label {
+    top: 0.1em;
+    left: 12px;
+    font-size: 0.85em;
+    color: var(--primary-color);
+    background: #fff;
+    padding: 0 4px;
+}
+
 /* Sohbetlerim kartları için modern ve responsive stil */
 .sohbet-listesi {
     list-style: none;
@@ -358,5 +462,8 @@ a.contact-button:hover {
         margin-top: 10px;
         width: 100%;
         text-align: center;
+    }
+    .hesap-form-konteyner {
+        padding: 18px 6px 18px 6px;
     }
 }

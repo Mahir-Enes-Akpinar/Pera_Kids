@@ -92,7 +92,8 @@ def hesap_view(request):
 
     context = {
         'login_form': login_form,
-        'register_form': register_form
+        'register_form': register_form,
+        'hesap_sayfasi': True
     }
     return render(request, 'playground/hesap.html', context)
 

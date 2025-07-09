@@ -73,6 +73,7 @@
     </style>
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    {% if not hesap_sayfasi %}
     <nav class="navbar">
         <div class="navbar-container">
             <div class="logo">
@@ -90,15 +91,18 @@
             </div>
         </div>
     </nav>
+    {% endif %}
 
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
+    {% if not hesap_sayfasi %}
     <footer class="footer">
         <p>&copy; 2025 Pera Kids. Tüm hakları saklıdır.</p>
     </footer>
+    {% endif %}
 
 </body>
 </html>
