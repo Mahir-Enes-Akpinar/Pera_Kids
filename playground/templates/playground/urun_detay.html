@@ -1,26 +1,34 @@
-{% extends "playground/base.html" %}
-{% load static %}
-
-{% block title %}{{ urun_detay_verisi.name }} - Pera Kids{% endblock %}
-
-{% block content %}
+{% extends "playground/base.html" %} {% load static %} {% block title %}{{
+urun_detay_verisi.name }} - Pera Kids{% endblock %} {% block content %}
 <div class="urun-detay-konteyner">
-    <div class="urun-detay-grid">
-        <div class="urun-detay-resim">
-            {% if urun_detay_verisi.image %}
-                <img src="{{ urun_detay_verisi.image.url }}" alt="{{ urun_detay_verisi.name }}">
-            {% endif %}
-        </div>
-        <div class="urun-bilgi">
-            <h1 class="main-title" style="font-size:2.2em; margin-bottom:10px;">{{ urun_detay_verisi.name }}</h1>
-            <div class="fiyat">{{ urun_detay_verisi.price }} TL (Seri Fiyatı)</div>
-            <div class="aciklama">
-                <p>{{ urun_detay_verisi.description|linebreaks }}</p>
-                <p><strong>Yaş Grubu:</strong> {{ urun_detay_verisi.age_group_set }}</p>
-                <p><strong>Mevcut Renkler:</strong> {{ urun_detay_verisi.available_colors }}</p>
-            </div>
-            <a href="{% url 'playground:sohbet_baslat' product_id=urun_detay_verisi.id %}" class="contact-button">Bu ürün Hakkında İletişime Geç</a>
-        </div>
+  <div class="urun-detay-grid">
+    <div class="urun-detay-resim">
+      {% if urun_detay_verisi.image %}
+      <img
+        src="{{ urun_detay_verisi.image.url }}"
+        alt="{{ urun_detay_verisi.name }}"
+      />
+      {% endif %}
     </div>
+    <div class="urun-bilgi">
+      <h1 class="main-title" style="font-size: 2.2em; margin-bottom: 10px">
+        {{ urun_detay_verisi.name }}
+      </h1>
+      <div class="fiyat">{{ urun_detay_verisi.price }} TL (Seri Fiyatı)</div>
+      <div class="aciklama">
+        <p>{{ urun_detay_verisi.description|linebreaks }}</p>
+        <p><strong>Yaş Grubu:</strong> {{ urun_detay_verisi.age_group_set }}</p>
+        <p>
+          <strong>Mevcut Renkler:</strong> {{ urun_detay_verisi.available_colors
+          }}
+        </p>
+      </div>
+      <a
+        href="{% url 'playground:sohbet_baslat' product_id=urun_detay_verisi.id %}"
+        class="contact-button"
+        >Bu ürün Hakkında İletişime Geç</a
+      >
+    </div>
+  </div>
 </div>
 {% endblock %}

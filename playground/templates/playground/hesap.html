@@ -34,25 +34,79 @@
         </form>
     </div>
     <div class="form-section" id="signupSection">
-        <form method="post" class="signup" autocomplete="off">
-            {% csrf_token %}
-            {% if register_form.errors %}
-                <div class="form-errors">{{ register_form.errors }}</div>
-            {% endif %}
+    <form method="post" class="signup" autocomplete="off">
+        {% csrf_token %}
+        {% if register_form.errors %}
+            <div class="form-errors">{{ register_form.errors }}</div>
+        {% endif %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="field floating-label-field">
-                <input type="text" name="username" id="id_username" placeholder=" " required>
-                <label for="id_username">Kullanıcı Adı</label>
+                {{ register_form.first_name }}
+                <label for="id_first_name">Ad *</label>
             </div>
             <div class="field floating-label-field">
-                <input type="password" name="password1" id="id_password1" placeholder=" " required>
-                <label for="id_password1">Şifre</label>
+                {{ register_form.last_name }}
+                <label for="id_last_name">Soyad *</label>
+            </div>
+        </div>
+
+        <div class="field floating-label-field">
+            {{ register_form.username }}
+            <label for="id_username">Kullanıcı Adı *</label>
+        </div>
+        
+        <div class="field floating-label-field">
+            {{ register_form.email }}
+            <label for="id_email">E-posta Adresi *</label>
+        </div>
+
+            <div class="field floating-label-field">
+                {{ register_form.phone_number }}
+                <label for="id_phone_number">Telefon Numarası</label>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;">
+
+            <div class="field floating-label-field">
+                {{ register_form.company_name }}
+                <label for="id_company_name">Firma Adı</label>
+            </div>
+        
+            <div class="field floating-label-field">
+                {{ register_form.street }}
+                <label for="id_street">Sokak ve Numara</label>
+            </div>
+        
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="field floating-label-field">
+                    {{ register_form.state }}
+                    <label for="id_state">İlçe</label>
+                </div>
+                <div class="field floating-label-field">
+                    {{ register_form.city }}
+                    <label for="id_city">Şehir / İl</label>
+                </div>
+            </div>
+
+            <div class="field floating-label-field">
+                {{ register_form.postal_code }}
+                <label for="id_postal_code">Posta Kodu</label>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;">
+
+            <div class="field floating-label-field">
+                {{ register_form.password1 }}
+                <label for="id_password1">Şifre *</label>
             </div>
             <div class="field floating-label-field">
-                <input type="password" name="password2" id="id_password2" placeholder=" " required>
-                <label for="id_password2">Şifreyi Doğrula</label>
+                {{ register_form.password2 }}
+                <label for="id_password2">Şifreyi Doğrula *</label>
             </div>
+
             <div class="btn">
-                <input type="submit" name="register_submit" value="Kayıt Ol" class="contact-button" style="width:100%;">
+                <input type="submit" name="register_submit" value="Kayıt Ol">
             </div>
         </form>
     </div>

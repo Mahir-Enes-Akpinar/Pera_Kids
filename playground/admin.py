@@ -1,52 +1,109 @@
-from django.contrib import admin
-from .models import Category, Product, Conversation, Message
+# playground/admin.py
 
-# Admin panelini daha kullanışlı hale getirmek için özelleştirme sınıfları
-# Bu sınıflar, admin panelinde modellerimizin nasıl görüneceğini ve davranacağını kontrol eder.
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+
+# Modellerimizin tamamını import ediyoruz
+from .models import (
+    UserProfile,
+    Category,
+    Product,
+    ProductColor,
+    ProductImage,
+    Conversation,
+    Message
+)
+
+
+# -----------------------------------------------------------------------------
+# KULLANICI YÖNETİMİ
+# Amacımız: Kullanıcı profili bilgilerini (adres, telefon vb.) doğrudan
+# standart kullanıcı sayfasının içinde göstermek ve düzenlemek.
+# -----------------------------------------------------------------------------
+
+class UserProfileInline(admin.StackedInline):
+    """Bu sınıf, UserProfile modelini User admin sayfasına gömmemizi sağlar."""
+    model = UserProfile
+    can_delete = False  # Profillerin silinmesini engeller
+    verbose_name_plural = 'Müşteri Ek Bilgileri (Adres, Telefon vb.)'
+    fk_name = 'user'
+
+# Django'nun varsayılan UserAdmin sınıfını genişletiyoruz
+class CustomUserAdmin(BaseUserAdmin):
+    """Varsayılan kullanıcı adminine bizim profil inline'ımızı ekler."""
+    inlines = (UserProfileInline,)
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super().get_inline_instances(request, obj)
+
+# Django'nun varsayılan User kaydını kaldırıp, yerine bizimkini kaydediyoruz
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
+
+# -----------------------------------------------------------------------------
+# KATEGORİ YÖNETİMİ
+# -----------------------------------------------------------------------------
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    """
-    Kategori modeli için admin paneli ayarları.
-    """
+    """Kategoriler için basit bir admin arayüzü."""
     list_display = ('name', 'slug')
-    # 'slug' alanının, 'name' alanından otomatik olarak doldurulmasını sağlar.
-    # Bu, her seferinde URL'yi elle yazma zahmetinden kurtarır.
     prepopulated_fields = {'slug': ('name',)}
 
 
-class MessageInline(admin.TabularInline):
-    """
-    Bu, mesajları doğrudan ait oldukları sohbetin içinde görmemizi sağlar.
-    """
-    model = Message
-    extra = 1 # Varsayılan olarak 1 tane boş mesaj kutusu gösterir.
-    readonly_fields = ('sender', 'text', 'timestamp') # Mesajları buradan değiştiremeyiz, sadece görürüz.
+# -----------------------------------------------------------------------------
+# ÜRÜN YÖNETİMİ
+# Amacımız: Tek bir Ürün sayfasından, o ürüne ait tüm renkleri,
+# resimleri, fiyatları ve stokları yönetebilmek.
+# -----------------------------------------------------------------------------
 
+class ProductImageInline(admin.TabularInline):
+    """Resim ekleme formunu, Renk formunun içine gömmek için kullanılır."""
+    model = ProductImage
+    extra = 1  # Varsayılan olarak 1 boş resim yükleme alanı göster
+    verbose_name = "Bu Renge Ait Resim"
+    verbose_name_plural = "Bu Renge Ait Resimler"
 
-@admin.register(Conversation)
-class ConversationAdmin(admin.ModelAdmin):
-    """
-    Sohbet modeli için admin paneli ayarları.
-    """
-    list_display = ('product', 'customer', 'created_at')
-    list_filter = ('customer', 'product')
-    search_fields = ('product__name', 'customer__username')
-    # Yukarıda tanımladığımız MessageInline'ı buraya ekliyoruz.
-    # Bu sayede her bir sohbetin detayına girdiğimizde, içindeki mesajları da liste halinde görebiliriz.
-    inlines = [MessageInline]
+class ProductColorInline(admin.StackedInline):
+    """Renk, fiyat ve stok ekleme formunu, Ürün formunun içine gömmek için kullanılır."""
+    model = ProductColor
+    inlines = [ProductImageInline]  # Resim formunu da bu formun içine gömüyoruz
+    extra = 1  # Varsayılan olarak 1 boş renk formu göster
+    verbose_name = "Ürün Rengi, Fiyatı ve Stoğu"
+    verbose_name_plural = "Ürün Renkleri, Fiyatları ve Stokları"
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    """
-    Ürün modeli için admin paneli ayarları.
-    """
-    list_display = ('name', 'category', 'price', 'is_available', 'created_at')
-    list_filter = ('category', 'is_available')
+    """Ana ürün admin arayüzü."""
+    list_display = ('name', 'category', 'is_available', 'created_at')
+    list_filter = ('is_available', 'category')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
+    
+    # Renk/Fiyat/Stok/Resim formlarını bu sayfaya dahil ediyoruz
+    inlines = [ProductColorInline]
 
-# Message modelini ayrıca kaydetmeye gerek yok çünkü Conversation içinde gösteriyoruz,
-# ama isterseniz ayrı bir sayfada görmek için aşağıdaki satırı ekleyebilirsiniz.
-# admin.site.register(Message)
+
+# -----------------------------------------------------------------------------
+# SOHBET YÖNETİMİ
+# -----------------------------------------------------------------------------
+
+class MessageInline(admin.TabularInline):
+    """Mesajları, ait oldukları sohbetin içinde göstermek için kullanılır."""
+    model = Message
+    extra = 0
+    readonly_fields = ('sender', 'text', 'timestamp')
+    can_delete = False
+
+@admin.register(Conversation)
+class ConversationAdmin(admin.ModelAdmin):
+    """Sohbetleri ve içindeki mesajları yönetmek için arayüz."""
+    list_display = ('product', 'customer', 'created_at')
+    readonly_fields = ('product', 'customer', 'created_at')
+    search_fields = ('product__name', 'customer__username')
+    inlines = [MessageInline]
