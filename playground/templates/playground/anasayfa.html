@@ -3,25 +3,23 @@
 {% block title %}Ana Sayfa - Pera Kids{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 style="text-align: center; font-size: 2.8em; color: var(--text-color); margin-bottom: 40px;">Mağazamızdaki Ürünler</h1>
+<h1 class="main-title" style="margin-bottom: 40px;">Mağazamızdaki Ürünler</h1>
 
-    {% if urunler_listesi %}
-        <ul class="urun-listesi">
-            {% for urun in urunler_listesi %}
-                <li class="urun-karti">
-                    <img src="{{ urun.image.url }}" alt="{{ urun.name }}">
-                    <div class="urun-karti-icerik">
-                        <h2>{{ urun.name }}</h2>
-                        <div class="urun-fiyati">{{ urun.price }} TL</div>
-                        <p><strong>Yaş:</strong> {{ urun.age_group_set }}</p>
-                        <a href="{% url 'playground:urun_detay' urun.slug %}" class="detay-link">Detayları Gör</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p style="text-align:center; color:#64748b; margin-top:40px;">Gösterilecek ürün bulunamadı.</p>
-    {% endif %}
-</div>
+{% if urunler_listesi %}
+    <ul class="urun-listesi">
+        {% for urun in urunler_listesi %}
+            <li class="urun-karti">
+                <img src="{{ urun.image.url }}" alt="{{ urun.name }}">
+                <div class="urun-karti-icerik">
+                    <h2>{{ urun.name }}</h2>
+                    <div class="urun-fiyati">{{ urun.price }} TL</div>
+                    <p><strong>Yaş:</strong> {{ urun.age_group_set }}</p>
+                    <a href="{% url 'playground:urun_detay' urun.slug %}" class="detay-link">Detayları Gör</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="main-title" style="font-size:1.2em; color:#64748b; margin-top:40px;">Gösterilecek ürün bulunamadı.</p>
+{% endif %}
 {% endblock %}

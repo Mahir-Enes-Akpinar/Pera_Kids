@@ -12,7 +12,6 @@
         <button class="tab-btn active" id="loginTab">Giriş Yap</button>
         <button class="tab-btn" id="signupTab">Kayıt Ol</button>
     </div>
-    
     <div class="form-section active" id="loginSection">
         <form method="post" class="login" autocomplete="off">
             {% csrf_token %}
@@ -29,41 +28,34 @@
             </div>
             <div class="pass-link"><a href="#">Şifremi Unuttum?</a></div>
             <div class="btn">
-                <input type="submit" name="login_submit" value="Giriş Yap">
+                <input type="submit" name="login_submit" value="Giriş Yap" class="contact-button" style="width:100%;">
             </div>
         </form>
     </div>
-
     <div class="form-section" id="signupSection">
         <form method="post" class="signup" autocomplete="off">
             {% csrf_token %}
             {% if register_form.errors %}
                 <div class="form-errors">{{ register_form.errors }}</div>
             {% endif %}
-            
             <div class="field floating-label-field">
                 {{ register_form.username }}
                 <label for="id_username">Kullanıcı Adı</label>
             </div>
-            
             <div class="field floating-label-field">
                 {{ register_form.password1 }}
                 <label for="id_password1">Şifre</label>
             </div>
-            
             <div class="field floating-label-field">
                 {{ register_form.password2 }}
                 <label for="id_password2">Şifreyi Doğrula</label>
             </div>
-
             <div class="btn">
-                <input type="submit" name="register_submit" value="Kayıt Ol">
+                <input type="submit" name="register_submit" value="Kayıt Ol" class="contact-button" style="width:100%;">
             </div>
         </form>
     </div>
 </div>
-
-<script>
     // Bu sayfaya özel script burada kalabilir veya harici bir .js dosyasına taşınabilir.
     // Şimdilik burada kalması sorun yaratmaz.
     const loginTab = document.getElementById('loginTab');

@@ -5,8 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pera Kids{% endblock %}</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/000000/baby-bottle.png"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'playground/css/styles.css' %}">
+    <style>
+        /* Animated gradient background for body */
+        body {
+            background: linear-gradient(120deg, #a1c4fd 0%, #ff6f91 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 8s ease-in-out infinite;
+        }
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        /* Navbar gradient and shadow */
+        .navbar {
+            background: linear-gradient(90deg, #ff6f91 0%, #ff9671 100%);
+            box-shadow: 0 4px 16px 0 rgba(255, 111, 145, 0.10);
+            border-bottom: none;
+        }
+        .navbar .logo a {
+            color: #fff !important;
+            text-shadow: 0 2px 8px rgba(255,255,255,0.15);
+        }
+        .navbar .nav-links a {
+            color: #fff !important;
+            background: rgba(255,255,255,0.10);
+            border-radius: 6px;
+            padding: 8px 16px;
+            margin-left: 18px;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+        .navbar .nav-links a:hover {
+            background: #ffc75f;
+            color: #ff6f91 !important;
+            box-shadow: 0 2px 12px 0 rgba(255,199,95,0.15);
+        }
+        .navbar .nav-links .nav-user {
+            color: #fff !important;
+            background: rgba(255,255,255,0.18);
+            border-radius: 6px;
+            padding: 8px 16px;
+            margin-left: 18px;
+        }
+        /* Footer enhancement */
+        .footer {
+            background: linear-gradient(90deg, #a1c4fd 0%, #ffc75f 100%);
+            color: #3d405b;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 -2px 12px 0 rgba(161,196,253,0.10);
+        }
+        /* Main content card effect */
+        main {
+            background: rgba(255,255,255,0.85);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(255,199,95,0.10);
+            margin: 32px auto 32px auto;
+            max-width: 1200px;
+        }
+        @media (max-width: 700px) {
+            main { margin: 12px 4px; padding: 12px 2px; }
+            .navbar-container { flex-direction: column; gap: 10px; }
+        }
+    </style>
 </head>
 <body class="{% block body_class %}{% endblock %}">
     <nav class="navbar">

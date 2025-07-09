@@ -13,23 +13,40 @@
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    background-color: var(--background-color);
+    /* Animated gradient background */
+    background: linear-gradient(120deg, #a1c4fd 0%, #ff6f91 100%);
+    background-size: 200% 200%;
+    animation: gradientMove 8s ease-in-out infinite;
     color: var(--text-color);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
+@keyframes gradientMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
 
 main {
     flex: 1; /* Footer'ı sayfanın en altına iter */
     padding: 40px 20px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(255,199,95,0.10);
+    margin: 32px auto 32px auto;
+    max-width: 1200px;
+}
+@media (max-width: 700px) {
+    main { margin: 12px 4px; padding: 12px 2px; }
+    .navbar-container { flex-direction: column; gap: 10px; }
 }
 
 /* Navbar Stilleri */
 .navbar {
-    background: var(--white-color);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    background: linear-gradient(90deg, #ff6f91 0%, #ff9671 100%);
+    box-shadow: 0 4px 16px 0 rgba(255, 111, 145, 0.10);
+    border-bottom: none;
     padding: 15px 0;
 }
 .navbar-container {
@@ -43,22 +60,32 @@ main {
 .navbar .logo a {
     font-weight: 700;
     font-size: 1.6em;
-    color: var(--primary-color);
+    color: #fff !important;
     text-decoration: none;
+    text-shadow: 0 2px 8px rgba(255,255,255,0.15);
 }
 .navbar .nav-links a {
-    margin-left: 25px;
+    margin-left: 18px;
     text-decoration: none;
-    color: var(--text-color);
+    color: #fff !important;
     font-weight: 500;
-    transition: color 0.3s;
+    background: rgba(255,255,255,0.10);
+    border-radius: 6px;
+    padding: 8px 16px;
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 .navbar .nav-links a:hover {
-    color: var(--primary-color);
+    background: #ffc75f;
+    color: #ff6f91 !important;
+    box-shadow: 0 2px 12px 0 rgba(255,199,95,0.15);
 }
 .navbar .nav-links .nav-user {
-    margin-left: 25px;
+    margin-left: 18px;
     font-weight: 600;
+    color: #fff !important;
+    background: rgba(255,255,255,0.18);
+    border-radius: 6px;
+    padding: 8px 16px;
 }
 
 /* Anasayfa - Ürün Kartı Stilleri */
@@ -171,16 +198,17 @@ a.contact-button:hover {
     color: var(--primary-color);
     margin-bottom: 30px;
 }
-/* ... hesap.html ve sohbetlerim.html için diğer özel stiller buraya eklenebilir ... */
-
 
 /* Footer Stilleri */
 .footer {
     text-align: center;
     padding: 20px;
     margin-top: 40px;
-    background-color: #e0eafc;
-    color: #6a89cc;
+    background: linear-gradient(90deg, #a1c4fd 0%, #ffc75f 100%);
+    color: #3d405b;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 -2px 12px 0 rgba(161,196,253,0.10);
 }
 
 /* body'e eklediğimiz özel sınıf sayesinde sadece bu sayfada arka planı değiştiriyoruz. */
@@ -245,4 +273,90 @@ a.contact-button:hover {
 
 .hesap-form-konteyner .field {
     margin-bottom: 22px; position: relative;
+}
+
+/* Sohbetlerim kartları için modern ve responsive stil */
+.sohbet-listesi {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+}
+.sohbet-karti {
+    background: var(--white-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px 0 rgba(161,196,253,0.13);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 24px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+.sohbet-karti img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px 0 rgba(161,196,253,0.10);
+}
+.sohbet-detay {
+    flex: 1;
+    min-width: 0;
+}
+.sohbet-karti h2 {
+    font-size: 1.15em;
+    margin: 0 0 6px 0;
+    color: var(--primary-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sohbet-karti p {
+    margin: 0;
+    color: #555;
+    font-size: 0.98em;
+}
+.sohbet-link {
+    display: inline-block;
+    margin-left: 16px;
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1em;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px 0 rgba(255,111,145,0.08);
+}
+.sohbet-link:hover {
+    background: var(--secondary-color);
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+}
+.hic-sohbet-yok {
+    grid-column: 1/-1;
+    text-align: center;
+    color: #888;
+    background: rgba(255,255,255,0.85);
+    border-radius: 12px;
+    padding: 32px 0 24px 0;
+    font-size: 1.1em;
+}
+@media (max-width: 600px) {
+    .sohbet-karti {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 10px;
+    }
+    .sohbet-link {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
+    }
 }
