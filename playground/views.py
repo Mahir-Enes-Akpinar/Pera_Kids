@@ -95,3 +95,18 @@ def hesap_view(request):
         'register_form': register_form
     }
     return render(request, 'playground/hesap.html', context)
+
+
+@login_required
+def sohbetlerim_view(request):
+    """
+    Giriş yapmış kullanıcının mevcut tüm sohbetlerini listeler.
+    """
+    # Conversation modelinde, 'customer' alanı o an giriş yapmış kullanıcı (request.user)
+    # olan tüm kayıtları buluyoruz. En yeniden eskiye doğru sıralıyoruz.
+    sohbetler = Conversation.objects.filter(customer=request.user).order_by('-created_at')
+
+    context = {
+        'sohbet_listesi': sohbetler
+    }
+    return render(request, 'playground/sohbetlerim.html', context)

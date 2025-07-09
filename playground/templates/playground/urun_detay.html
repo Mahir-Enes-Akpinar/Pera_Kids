@@ -1,77 +1,29 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ urun_detay_verisi.name }} - Pera Kids</title>
-    <style>
-        body { font-family: sans-serif; margin: 20px 40px; }
-        .container { max-width: 960px; margin: auto; }
-        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; }
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-        .product-image img {
-            width: 100%;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        .product-info h1 {
-            margin-top: 0;
-            font-size: 2.5em;
-        }
-        .product-price {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #2c5e2e;
-            margin: 20px 0;
-        }
-        .product-details p {
-            line-height: 1.6;
-            color: #333;
-        }
-        .contact-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
+{% extends "playground/base.html" %}
+{% load static %}
 
-    <div class="container">
-        <a href="{% url 'playground:anasayfa' %}" class="back-link">&larr; Tüm Ürünlere Geri Dön</a>
+{% block title %}{{ urun_detay_verisi.name }} - Pera Kids{% endblock %}
 
-        <div class="product-grid">
-            <div class="product-image">
-                {% if urun_detay_verisi.image %}
-                    <img src="{{ urun_detay_verisi.image.url }}" alt="{{ urun_detay_verisi.name }}">
-                {% endif %}
-            </div>
+{% block content %}
+<div class="urun-detay-konteyner">
+    <div class="urun-detay-grid">
+        <div class="urun-detay-resim">
+            {% if urun_detay_verisi.image %}
+                <img src="{{ urun_detay_verisi.image.url }}" alt="{{ urun_detay_verisi.name }}">
+            {% endif %}
+        </div>
+        
+        <div class="urun-bilgi">
+            <h1>{{ urun_detay_verisi.name }}</h1>
+            <div class="fiyat">{{ urun_detay_verisi.price }} TL (Seri Fiyatı)</div>
             
-            <div class="product-info">
-                <h1>{{ urun_detay_verisi.name }}</h1>
-                <div class="product-price">{{ urun_detay_verisi.price }} TL (Seri Fiyatı)</div>
-                
-                <div class="product-details">
-                    <p>{{ urun_detay_verisi.description|linebreaks }}</p>
-                    <p><strong>Yaş Grubu:</strong> {{ urun_detay_verisi.age_group_set }}</p>
-                    <p><strong>Mevcut Renkler:</strong> {{ urun_detay_verisi.available_colors }}</p>
-                </div>
-
-                <a href="{% url 'playground:sohbet_baslat' product_id=urun_detay_verisi.id %}" class="contact-button">Bu Ürün Hakkında İletişime Geç</a>
+            <div class="aciklama">
+                <p>{{ urun_detay_verisi.description|linebreaks }}</p>
+                <p><strong>Yaş Grubu:</strong> {{ urun_detay_verisi.age_group_set }}</p>
+                <p><strong>Mevcut Renkler:</strong> {{ urun_detay_verisi.available_colors }}</p>
             </div>
+
+            <a href="{% url 'playground:sohbet_baslat' product_id=urun_detay_verisi.id %}" class="contact-button">Bu Ürün Hakkında İletişime Geç</a>
         </div>
     </div>
-
-</body>
-</html>
+</div>
+{% endblock %}

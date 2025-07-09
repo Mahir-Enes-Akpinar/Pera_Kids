@@ -23,4 +23,6 @@ urlpatterns = [
 
     
     path('hesap/', views.hesap_view, name='hesap'),
+
+    path('sohbetlerim/', views.sohbetlerim_view, name='sohbetlerim'),
 ]

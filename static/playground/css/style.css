@@ -1,0 +1,248 @@
+/* Genel ve Temel Stiller */
+:root {
+    --primary-color: #ff6f91; /* Canlı Pembe */
+    --secondary-color: #ff9671; /* Tatlı Turuncu */
+    --accent-color: #ffc75f; /* Güneşli Sarı */
+    --light-blue: #a1c4fd; /* Açık Mavi */
+    --text-color: #3d405b; /* Koyu Gri */
+    --background-color: #f7faff;
+    --white-color: #ffffff;
+    --border-color: #e0eafc;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* Footer'ı sayfanın en altına iter */
+    padding: 40px 20px;
+}
+
+/* Navbar Stilleri */
+.navbar {
+    background: var(--white-color);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 15px 0;
+}
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.navbar .logo a {
+    font-weight: 700;
+    font-size: 1.6em;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.navbar .nav-links a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.navbar .nav-links a:hover {
+    color: var(--primary-color);
+}
+.navbar .nav-links .nav-user {
+    margin-left: 25px;
+    font-weight: 600;
+}
+
+/* Anasayfa - Ürün Kartı Stilleri */
+.urun-listesi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 35px;
+    list-style: none;
+    padding: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.urun-karti {
+    background: var(--white-color);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px 0 rgba(160,200,255,0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+.urun-karti:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 32px 0 rgba(160,200,255,0.2);
+}
+.urun-karti img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+.urun-karti-icerik {
+    padding: 20px;
+}
+.urun-karti h2 {
+    font-size: 1.25em;
+    color: var(--text-color);
+    margin: 10px 0;
+}
+.urun-karti .urun-fiyati {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 12px 0;
+}
+.urun-karti a.detay-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 22px;
+    background: var(--primary-color);
+    color: var(--white-color);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+.urun-karti a.detay-link:hover {
+    background: var(--secondary-color);
+}
+
+/* Ürün Detay Sayfası Stilleri */
+.urun-detay-konteyner {
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 20px;
+    background-color: var(--white-color);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(160,200,255,0.15);
+}
+.urun-detay-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+.urun-detay-grid img {
+    width: 100%;
+    border-radius: 12px;
+}
+.urun-bilgi h1 { font-size: 3em; margin-top: 0; line-height: 1.2; }
+.urun-bilgi .fiyat { font-size: 2.2em; font-weight: 600; color: var(--primary-color); margin: 20px 0; }
+.urun-bilgi .aciklama p { line-height: 1.8; color: #555; }
+a.contact-button { /* Diğer butonlarla aynı stili paylaşır */
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 30px;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+a.contact-button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+/* Hesap ve Sohbet Sayfaları Stilleri */
+.form-container, .sohbet-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--white-color);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(160,200,255,0.15);
+}
+.form-container h1, .sohbet-container h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+/* ... hesap.html ve sohbetlerim.html için diğer özel stiller buraya eklenebilir ... */
+
+
+/* Footer Stilleri */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: #e0eafc;
+    color: #6a89cc;
+}
+
+/* body'e eklediğimiz özel sınıf sayesinde sadece bu sayfada arka planı değiştiriyoruz. */
+.hesap-sayfasi-govde {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bu sayfada base.html'den gelen main padding'ini sıfırlıyoruz. */
+.hesap-sayfasi-govde main {
+    padding: 20px;
+}
+
+.hesap-form-konteyner {
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.95);
+    border-radius: 22px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.13);
+    padding: 44px 36px 36px 36px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ... (Geri kalan .main-title, .tab-controls, .field vb. tüm özel stilleriniz buraya gelecek) ... */
+/* ÖNEMLİ: hesap.html'deki <style> etiketinin içindeki TÜM CSS kodlarını buraya taşıyın. */
+/* Ben en önemlilerini taşıdım, siz de kopyalayıp yapıştırabilirsiniz. */
+
+.hesap-form-konteyner .main-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #ff6f91;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.hesap-form-konteyner .tab-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+}
+
+.hesap-form-konteyner .tab-btn {
+    flex: 1; padding: 14px 0; background: none; border: none; font-size: 1.13rem;
+    font-weight: 600; color: #6a89cc; cursor: pointer;
+    border-bottom: 3px solid transparent; transition: border-color 0.3s, color 0.3s;
+}
+
+.hesap-form-konteyner .tab-btn.active {
+    border-bottom: 3px solid #ff6f91; color: #ff6f91;
+}
+
+.hesap-form-konteyner .form-section { display: none; }
+.hesap-form-konteyner .form-section.active { display: block; animation: fadeIn 0.5s; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+.hesap-form-konteyner .field {
+    margin-bottom: 22px; position: relative;
+}

@@ -1,274 +1,90 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Hesap İşlemleri - Pera Kids</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        .main-container {
-            max-width: 420px;
-            margin: 48px auto;
-            background: rgba(255,255,255,0.95);
-            border-radius: 22px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.13);
-            padding: 44px 36px 36px 36px;
-            position: relative;
-            overflow: hidden;
-        }
-        .main-container::before {
-            content: "";
-            position: absolute;
-            top: -60px; left: -60px;
-            width: 140px; height: 140px;
-            background: linear-gradient(135deg, #fcb69f 0%, #ffecd2 100%);
-            border-radius: 50%;
-            z-index: 0;
-            opacity: 0.35;
-        }
-        .main-container::after {
-            content: "";
-            position: absolute;
-            bottom: -60px; right: -60px;
-            width: 140px; height: 140px;
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-            border-radius: 50%;
-            z-index: 0;
-            opacity: 0.35;
-        }
-        .main-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #ff6f91;
-            text-align: center;
-            margin-bottom: 28px;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
-        }
-        .tab-controls {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 28px;
-            position: relative;
-            z-index: 1;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 14px 0;
-            background: none;
-            border: none;
-            font-size: 1.13rem;
-            font-weight: 600;
-            color: #6a89cc;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: border-color 0.3s, color 0.3s;
-            border-radius: 0;
-        }
-        .tab-btn.active {
-            border-bottom: 3px solid #ff6f91;
-            color: #ff6f91;
-            background: linear-gradient(90deg, #fcb69f 0%, #a1c4fd 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .form-section {
-            display: none;
-            position: relative;
-            z-index: 1;
-        }
-        .form-section.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .form-errors ul, .form-errors {
-            color: #ff3860;
-            padding: 0;
-            margin: 0 0 15px 0;
-            font-size: 0.9em;
-            list-style: none;
-            text-align: center;
-            background: #ffe0e6;
-            border-radius: 6px;
-            padding: 10px;
-        }
-        .field {
-            margin-bottom: 22px;
-            position: relative;
-        }
-        .field input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e0eafc;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            background: #f7faff;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-            color: #444;
-            box-shadow: 0 2px 8px rgba(160,200,255,0.07);
-        }
-        .field input:focus {
-            border-color: #ff6f91;
-            box-shadow: 0 0 0 2px #ff6f9133;
-        }
-        .floating-label-field label {
-            position: absolute;
-            left: 18px;
-            top: 16px;
-            color: #b2becd;
-            font-size: 1em;
-            pointer-events: none;
-            transition: 0.2s;
-            background: transparent;
-        }
-        .floating-label-field input:focus + label,
-        .floating-label-field input:not(:placeholder-shown) + label {
-            top: -10px;
-            left: 10px;
-            font-size: 0.85em;
-            color: #ff6f91;
-            background: #fff;
-            padding: 0 4px;
-        }
-        .btn {
-            width: 100%;
-            padding: 0;
-            background: none;
-            border: none;
-            margin-top: 10px;
-        }
-        .btn input[type="submit"] {
-            width: 100%;
-            padding: 14px 0;
-            background: linear-gradient(90deg, #ff6f91 0%, #fcb69f 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.13rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 2px 12px rgba(255,111,145,0.13);
-        }
-        .btn input[type="submit"]:hover {
-            background: linear-gradient(90deg, #a1c4fd 0%, #ff6f91 100%);
-            transform: translateY(-2px) scale(1.02);
-        }
-        .pass-link {
-            text-align: right;
-            margin-top: 8px;
-        }
-        .pass-link a {
-            color: #6a89cc;
-            text-decoration: none;
-            font-size: 0.98em;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .pass-link a:hover {
-            color: #ff6f91;
-        }
-        @media (max-width: 500px) {
-            .main-container {
-                padding: 24px 8px 18px 8px;
-            }
-            .main-title {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="main-container">
-        <div class="main-title">Hesap İşlemleri</div>
-        <div class="tab-controls">
-            <button class="tab-btn active" id="loginTab">Giriş Yap</button>
-            <button class="tab-btn" id="signupTab">Kayıt Ol</button>
-        </div>
-        
-        <div class="form-section active" id="loginSection">
-            <form method="post" class="login" autocomplete="off">
-                {% csrf_token %}
-                {% if login_form.errors %}
-                    <div class="form-errors">{{ login_form.non_field_errors }}</div>
-                {% endif %}
-                <div class="field floating-label-field">
-                    <input type="text" name="username" id="login_username" placeholder=" " required autocomplete="username">
-                    <label for="login_username">Kullanıcı Adı</label>
-                </div>
-                <div class="field floating-label-field">
-                    <input type="password" name="password" id="login_password" placeholder=" " required autocomplete="current-password">
-                    <label for="login_password">Şifre</label>
-                </div>
-                <div class="pass-link"><a href="#">Şifremi Unuttum?</a></div>
-                <div class="btn">
-                    <input type="submit" name="login_submit" value="Giriş Yap">
-                </div>
-            </form>
-        </div>
+{% extends "playground/base.html" %}
+{% load static %}
 
-        <div class="form-section" id="signupSection">
-            <form method="post" class="signup" autocomplete="off">
-                {% csrf_token %}
-                {% if register_form.errors %}
-                    <div class="form-errors">{{ register_form.errors }}</div>
-                {% endif %}
-                
-                <div class="field floating-label-field">
-                    {{ register_form.username }}
-                    <label for="id_username">Kullanıcı Adı</label>
-                </div>
-                
-                <div class="field floating-label-field">
-                    {{ register_form.password1 }}
-                    <label for="id_password1">Şifre</label>
-                </div>
-                
-                <div class="field floating-label-field">
-                    {{ register_form.password2 }}
-                    <label for="id_password2">Şifreyi Doğrula</label>
-                </div>
+{% block title %}Hesap İşlemleri - Pera Kids{% endblock %}
 
-                <div class="btn">
-                    <input type="submit" name="register_submit" value="Kayıt Ol">
-                </div>
-            </form>
-        </div>
+{% block body_class %}hesap-sayfasi-govde{% endblock %}
+
+{% block content %}
+<div class="hesap-form-konteyner">
+    <div class="main-title">Hesap İşlemleri</div>
+    <div class="tab-controls">
+        <button class="tab-btn active" id="loginTab">Giriş Yap</button>
+        <button class="tab-btn" id="signupTab">Kayıt Ol</button>
+    </div>
+    
+    <div class="form-section active" id="loginSection">
+        <form method="post" class="login" autocomplete="off">
+            {% csrf_token %}
+            {% if login_form.errors %}
+                <div class="form-errors">{{ login_form.non_field_errors }}</div>
+            {% endif %}
+            <div class="field floating-label-field">
+                <input type="text" name="username" id="login_username" placeholder=" " required autocomplete="username">
+                <label for="login_username">Kullanıcı Adı</label>
+            </div>
+            <div class="field floating-label-field">
+                <input type="password" name="password" id="login_password" placeholder=" " required autocomplete="current-password">
+                <label for="login_password">Şifre</label>
+            </div>
+            <div class="pass-link"><a href="#">Şifremi Unuttum?</a></div>
+            <div class="btn">
+                <input type="submit" name="login_submit" value="Giriş Yap">
+            </div>
+        </form>
     </div>
 
-    <script>
-        const loginTab = document.getElementById('loginTab');
-        const signupTab = document.getElementById('signupTab');
-        const loginSection = document.getElementById('loginSection');
-        const signupSection = document.getElementById('signupSection');
+    <div class="form-section" id="signupSection">
+        <form method="post" class="signup" autocomplete="off">
+            {% csrf_token %}
+            {% if register_form.errors %}
+                <div class="form-errors">{{ register_form.errors }}</div>
+            {% endif %}
+            
+            <div class="field floating-label-field">
+                {{ register_form.username }}
+                <label for="id_username">Kullanıcı Adı</label>
+            </div>
+            
+            <div class="field floating-label-field">
+                {{ register_form.password1 }}
+                <label for="id_password1">Şifre</label>
+            </div>
+            
+            <div class="field floating-label-field">
+                {{ register_form.password2 }}
+                <label for="id_password2">Şifreyi Doğrula</label>
+            </div>
 
-        loginTab.onclick = function() {
-            loginTab.classList.add('active');
-            signupTab.classList.remove('active');
-            loginSection.classList.add('active');
-            signupSection.classList.remove('active');
-        };
-        
-        signupTab.onclick = function() {
-            signupTab.classList.add('active');
-            loginTab.classList.remove('active');
-            signupSection.classList.add('active');
-            loginSection.classList.remove('active');
-        };
-    </script>
-</body>
-</html>
+            <div class="btn">
+                <input type="submit" name="register_submit" value="Kayıt Ol">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Bu sayfaya özel script burada kalabilir veya harici bir .js dosyasına taşınabilir.
+    // Şimdilik burada kalması sorun yaratmaz.
+    const loginTab = document.getElementById('loginTab');
+    const signupTab = document.getElementById('signupTab');
+    const loginSection = document.getElementById('loginSection');
+    const signupSection = document.getElementById('signupSection');
+
+    loginTab.onclick = function() {
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+        loginSection.classList.add('active');
+        signupSection.classList.remove('active');
+    };
+    
+    signupTab.onclick = function() {
+        signupTab.classList.add('active');
+        loginTab.classList.remove('active');
+        signupSection.classList.add('active');
+        loginSection.classList.remove('active');
+    };
+</script>
+{% endblock %}
+
+{% block extra_css %}
