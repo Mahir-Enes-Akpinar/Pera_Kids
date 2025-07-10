@@ -7,23 +7,23 @@ from django.contrib.auth import login
 from .forms import CustomUserCreationForm 
 # Create your views here.
 
+# playground/views.py
+
+# ...diğer importlarınız...
+from .models import Product, ProductColor, UserProfile, ProductImage
 def anasayfa(request):
     """
-    Bu fonksiyon, ana sayfa isteği geldiğinde çalışır.
-    Veritabanındaki tüm mevcut ürünleri alır ve anasayfa.html şablonuna gönderir.
+    Ana sayfayı gösterir. Satışta olan tüm ürünleri ve her ürünün
+    ana rengine ait ilk resmi ve fiyatı alır.
     """
-    # Sadece stokta olan (is_available=True) ürünleri alıyoruz
-    # ve en yeniden eskiye doğru sıralıyoruz.
-    urunler = Product.objects.filter(is_available=True).order_by('-created_at')
+    # Sadece satışta olan ve en az bir rengi tanımlanmış ürünleri alıyoruz.
+    # 'colors__isnull=False' bir ürüne ait en az bir ProductColor olup olmadığını kontrol eder.
+    # 'distinct()' aynı ürünün birden çok kez listelenmesini engeller.
+    urunler = Product.objects.filter(is_available=True, colors__isnull=False).distinct().order_by('-created_at')
 
-    # 'urunler' verisini bir "context" sözlüğü içinde şablona gönderiyoruz.
-    # Şablon içinde bu verilere 'urunler_listesi' anahtar kelimesiyle erişeceğiz.
     context = {
         'urunler_listesi': urunler
     }
-
-    # render fonksiyonu, isteği, şablon dosyasını ve verileri birleştirerek
-    # kullanıcıya tam bir HTML sayfası olarak gönderir.
     return render(request, 'playground/anasayfa.html', context)
 
 
@@ -111,3 +111,4 @@ def sohbetlerim_view(request):
         'sohbet_listesi': sohbetler
     }
     return render(request, 'playground/sohbetlerim.html', context)
+

@@ -91,11 +91,11 @@ main {
 /* Anasayfa - Ürün Kartı Stilleri */
 .urun-listesi {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 35px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
     list-style: none;
     padding: 0;
-    max-width: 1200px;
+    max-width: 100vw;
     margin: 0 auto;
 }
 .urun-karti {
@@ -106,6 +106,13 @@ main {
     transition: transform 0.2s, box-shadow 0.2s;
     border: 1px solid var(--border-color);
     overflow: hidden;
+    aspect-ratio: 3/4;
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0;
 }
 .urun-karti:hover {
     transform: translateY(-8px);
@@ -113,8 +120,75 @@ main {
 }
 .urun-karti img {
     width: 100%;
-    height: 220px;
+    height: 40%;
+    min-height: 120px;
+    max-height: 180px;
     object-fit: cover;
+    border-radius: 0;
+}
+.urun-galeri {
+    position: relative;
+    width: 100%;
+    height: 40%;
+    min-height: 120px;
+    max-height: 180px;
+    overflow: hidden;
+}
+.galeri-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    position: absolute;
+    top: 0; left: 0;
+    transition: opacity 0.3s;
+    border-radius: 0;
+@media (max-width: 1200px) {
+    .urun-listesi {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .urun-listesi {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 600px) {
+    .urun-listesi {
+        grid-template-columns: 1fr;
+    }
+    .urun-karti {
+        aspect-ratio: 1/1.2;
+    }
+}
+}
+.galeri-img.active {
+    display: block;
+    position: relative;
+    opacity: 1;
+    z-index: 2;
+}
+.galeri-controls {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+.galeri-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    border: 2px solid #fff;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.galeri-dot.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
 }
 .urun-karti-icerik {
     padding: 20px;
@@ -466,4 +540,31 @@ a.contact-button:hover {
     .hesap-form-konteyner {
         padding: 18px 6px 18px 6px;
     }
+}
+
+.renk-secenekleri {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 0;
+    list-style: none;
+}
+
+.renk-secenekleri .renk-kutusu {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%; /* Yuvarlak renk kutucukları */
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.renk-secenekleri .renk-kutusu:hover {
+    transform: scale(1.1);
+}
+
+.renk-secenekleri .renk-kutusu.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--white-color), 0 0 0 4px var(--primary-color);
 }

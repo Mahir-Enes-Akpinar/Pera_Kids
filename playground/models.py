@@ -49,8 +49,18 @@ class Product(models.Model):
         verbose_name = "Ürün"
         verbose_name_plural = "Ürünler"
         ordering = ('-created_at',)
+
     def __str__(self):
         return self.name
+
+    def get_main_color(self):
+        return self.colors.filter(is_main_color=True).first()
+
+    def get_main_image(self):
+        main_color = self.get_main_color()
+        if main_color:
+            return main_color.images.first()
+        return None
 
 class ProductColor(models.Model):
     """

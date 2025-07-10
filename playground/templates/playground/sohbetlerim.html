@@ -1,27 +1,29 @@
-{% extends "playground/base.html" %} {% load static %} {% block title
-%}Sohbetlerim - Pera Kids{% endblock %} {% block content %}
+{% extends "playground/base.html" %}
+{% load static %}
+{% block title %}Sohbetlerim - Pera Kids{% endblock %}
+{% block content %}
 <div class="sohbet-container">
   <h1 class="main-title">Sohbetlerim</h1>
   <ul class="sohbet-listesi">
     {% for sohbet in sohbet_listesi %}
-    <li class="sohbet-karti">
-      <img
-        src="{{ sohbet.product.image.url }}"
-        alt="{{ sohbet.product.name }}"
-      />
-      <div class="sohbet-detay">
-        <h2>{{ sohbet.product.name }}</h2>
-        <p>Başlangıç Tarihi: {{ sohbet.created_at|date:"d F Y" }}</p>
-      </div>
-      <a href="#" class="sohbet-link">Sohbeti Görüntüle</a>
-    </li>
+      <li class="sohbet-karti">
+        <img
+          src="{{ sohbet.product.image.url }}"
+          alt="{{ sohbet.product.name }}"
+        />
+        <div class="sohbet-detay">
+          <h2>{{ sohbet.product.name }}</h2>
+          <p>Başlangıç Tarihi: {{ sohbet.created_at|date:"d F Y" }}</p>
+        </div>
+        <a href="#" class="sohbet-link">Sohbeti Görüntüle</a>
+      </li>
     {% empty %}
-    <div class="hic-sohbet-yok">
-      <p>Henüz hiç sohbet başlatmadınız.</p>
-      <p>
-        Beğendiğiniz bir ürünün sayfasından bizimle iletişime geçebilirsiniz.
-      </p>
-    </div>
+      <li class="hic-sohbet-yok">
+        <p>Henüz hiç sohbet başlatmadınız.</p>
+        <p>
+          Beğendiğiniz bir ürünün sayfasından bizimle iletişime geçebilirsiniz.
+        </p>
+      </li>
     {% endfor %}
   </ul>
 </div>
