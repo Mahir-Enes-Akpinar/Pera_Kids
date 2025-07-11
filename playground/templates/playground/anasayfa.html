@@ -4,138 +4,133 @@
 {% block title %}Ana Sayfa - Pera Kids{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="page-title">Mağazamızdaki Ürünler</h1>
+<div class="anasayfa-bg">
+  <!-- Playful animated shapes for extra color -->
+  <div class="anasayfa-shape shape1"></div>
+  <div class="anasayfa-shape shape2"></div>
+  <div class="anasayfa-shape shape3"></div>
+  <div class="anasayfa-shape shape4"></div>
+  <div class="anasayfa-shape shape5"></div>
 
-    {% if urunler_listesi %}
-        <ul class="urun-listesi">
-            {% for product in urunler_listesi %}
-                <li class="urun-karti">
-                    <div class="urun-galeri" id="product-gallery-{{ product.id }}">
-                        {% with main_color=product.get_main_color %}
-                            {% if main_color %}
-                                {% for img in main_color.images.all %}
-                                    <img class="galeri-img {% if forloop.first %}active{% endif %}" src="{{ img.image.url }}" alt="{{ product.name }} {{ main_color.color_name }}" style="width:100%;height:220px;object-fit:cover;position:absolute;top:0;left:0;">
-                                {% endfor %}
-                                <div class="galeri-controls" id="gallery-controls-{{ product.id }}">
-                                    {% for img in main_color.images.all %}
-                                        <span class="galeri-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <img class="galeri-img active" src="{% static 'playground/img/placeholder.png' %}" alt="{{ product.name }}" style="width:100%;height:220px;object-fit:cover;position:absolute;top:0;left:0;">
-                            {% endif %}
-                        {% endwith %}
-                    </div>
-                    <div class="urun-karti-icerik">
-                        <h2><a href="{% url 'playground:urun_detay' product.slug %}">{{ product.name }}</a></h2>
-                        <ul class="renk-secenekleri">
-                            {% for color in product.colors.all %}
-                                {% with color_images=color.images.all %}
-                                    {% if color_images %}
-                                        <li class="renk-kutusu {% if color.is_main_color %}active{% endif %}"
-                                            style="background-color: {{ color.color_name|default_if_none:'#cccccc' }};"
-                                            title="{{ color.color_name }}"
-                                            data-images='[{% for img in color_images %}{{ '"' }}{{ img.image.url }}{{ '"' }}{% if not forloop.last %},{% endif %}{% endfor %}]'
-                                            data-product-id="{{ product.id }}"
-                                            data-price="{{ color.price }}">
-                                        </li>
-                                    {% endif %}
-                                {% endwith %}
-                            {% endfor %}
-                        </ul>
-                        <div class="urun-fiyati">
-                            {% with main_color=product.get_main_color %}
-                                {% if main_color %}
-                                    {{ main_color.price }} TL
-                                {% endif %}
-                            {% endwith %}
-                        </div>
-                        <a href="{% url 'playground:urun_detay' product.slug %}" class="detay-link">Detayları Gör</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p style="text-align:center;">Gösterilecek ürün bulunamadı.</p>
-    {% endif %}
+  <div class="container">
+      <h1 class="page-title">Mağazamızdaki Ürünler</h1>
+
+      {% if urunler_listesi %}
+          <div class="urun-listesi">
+              {% for product in urunler_listesi %}
+                  <div class="urun-karti">
+                      <a href="{% url 'playground:urun_detay' product.slug %}">
+                          <div class="urun-resim-konteyner">
+                              {% with main_image=product.get_main_image %}
+                                  <img id="product-image-{{ product.id }}" src="{% if main_image %}{{ main_image.image.url }}{% else %}{% static 'playground/img/placeholder.png' %}{% endif %}" alt="{{ product.name }}">
+                              {% endwith %}
+                          </div>
+                      </a>
+                      <div class="urun-karti-icerik">
+                          <h2>{{ product.name }}</h2>
+                          <ul class="renk-secenekleri">
+                              {% for color in product.colors.all %}
+                                  {% with color_image=color.images.first %}
+                                      {% if color_image %}
+                                          <li class="renk-kutusu {% if color.is_main_color %}active{% endif %}"
+                                              style="background-color: {{ color.color_name|lower }};"
+                                              title="{{ color.color_name }}"
+                                              data-image-url="{{ color_image.image.url }}"
+                                              data-product-id="{{ product.id }}">
+                                          </li>
+                                      {% endif %}
+                                  {% endwith %}
+                              {% endfor %}
+                          </ul>
+                          {% with main_color=product.get_main_color %}
+                              {% if main_color %}
+                                  <div class="urun-fiyati">{{ main_color.price }} TL</div>
+                              {% endif %}
+                          {% endwith %}
+                          <a href="{% url 'playground:urun_detay' product.slug %}" class="detay-link">Detayları Gör</a>
+                      </div>
+                  </div>
+              {% endfor %}
+          </div>
+      {% else %}
+          <p style="text-align:center;">Gösterilecek ürün bulunamadı.</p>
+      {% endif %}
+  </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Renk seçimi ve galeri güncelleme
-        const colorSwatches = document.querySelectorAll('.renk-kutusu');
-        colorSwatches.forEach(swatch => {
-            swatch.addEventListener('click', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                const productId = this.dataset.productId;
-                const imagesData = this.dataset.images;
-                let imageUrls = [];
-                try {
-                    imageUrls = JSON.parse(imagesData.replace(/'/g, '"'));
-                } catch (e) {}
-                const gallery = document.getElementById(`product-gallery-${productId}`);
-                const controlsId = `gallery-controls-${productId}`;
-                let controls;
-                if (gallery && imageUrls.length > 0) {
-                    gallery.innerHTML = '';
-                    imageUrls.forEach((url, idx) => {
-                        const img = document.createElement('img');
-                        img.src = url;
-                        img.className = 'galeri-img' + (idx === 0 ? ' active' : '');
-                        img.alt = '';
-                        gallery.appendChild(img);
-                    });
-                    // Slider dotları
-                    controls = document.createElement('div');
-                    controls.className = 'galeri-controls';
-                    controls.id = controlsId;
-                    imageUrls.forEach((url, idx) => {
-                        const dot = document.createElement('span');
-                        dot.className = 'galeri-dot' + (idx === 0 ? ' active' : '');
-                        dot.setAttribute('data-index', idx);
-                        dot.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            const imgs = gallery.querySelectorAll('.galeri-img');
-                            imgs.forEach(img => img.classList.remove('active'));
-                            imgs[idx].classList.add('active');
-                            controls.querySelectorAll('.galeri-dot').forEach(d => d.classList.remove('active'));
-                            dot.classList.add('active');
-                        });
-                        controls.appendChild(dot);
-                    });
-                    gallery.appendChild(controls);
-                }
-                const parentCard = this.closest('.urun-karti');
-                parentCard.querySelectorAll('.renk-kutusu').forEach(s => s.classList.remove('active'));
-                this.classList.add('active');
-                // Fiyatı güncelle
-                const priceDiv = parentCard.querySelector('.urun-fiyati');
-                if (priceDiv) {
-                    const priceValue = this.getAttribute('data-price');
-                    if (priceValue) {
-                        priceDiv.textContent = priceValue + ' TL';
-                    }
-                }
-            });
-        });
-        // Galeri sliderı (ilk yüklemede)
-        document.querySelectorAll('.galeri-controls').forEach(controls => {
-            const gallery = controls.closest('.urun-galeri');
-            const imgs = gallery.querySelectorAll('.galeri-img');
-            controls.querySelectorAll('.galeri-dot').forEach((dot, idx) => {
-                dot.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    imgs.forEach(img => img.classList.remove('active'));
-                    imgs[idx].classList.add('active');
-                    controls.querySelectorAll('.galeri-dot').forEach(d => d.classList.remove('active'));
-                    dot.classList.add('active');
-                });
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    const colorSwatches = document.querySelectorAll('.renk-kutusu');
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const productId = this.dataset.productId;
+            const newImageUrl = this.dataset.imageUrl;
+            const productImage = document.getElementById(`product-image-${productId}`);
+            if (productImage && newImageUrl) {
+                productImage.src = newImageUrl;
+            }
+            const parentCard = this.closest('.urun-karti');
+            parentCard.querySelectorAll('.renk-kutusu').forEach(s => s.classList.remove('active'));
+            this.classList.add('active');
         });
     });
+});
 </script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.anasayfa-bg {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: linear-gradient(120deg, #ff6f91 0%, #ff9671 30%, #ffc75f 60%, #a1c4fd 100%);
+  animation: bgMove 18s ease-in-out infinite alternate;
+}
+.anasayfa-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.22;
+  filter: blur(2px);
+  z-index: 1;
+  animation: floatShape 12s infinite ease-in-out alternate;
+}
+.anasayfa-shape.shape1 { background: #ff6f91; width: 220px; height: 220px; left: 4vw; top: 7vh; animation-delay: 0s; }
+.anasayfa-shape.shape2 { background: #ffc75f; width: 140px; height: 140px; right: 10vw; top: 20vh; animation-delay: 2s; }
+.anasayfa-shape.shape3 { background: #a1c4fd; width: 180px; height: 180px; left: 18vw; bottom: 8vh; animation-delay: 4s; }
+.anasayfa-shape.shape4 { background: #ff9671; width: 110px; height: 110px; right: 20vw; bottom: 10vh; animation-delay: 1s; }
+.anasayfa-shape.shape5 { background: #ff6f91; width: 80px; height: 80px; left: 55vw; top: 65vh; animation-delay: 3s; }
+@media (max-width: 900px) {
+  .anasayfa-shape.shape1 { width: 120px; height: 120px; }
+  .anasayfa-shape.shape2 { width: 80px; height: 80px; }
+  .anasayfa-shape.shape3 { width: 100px; height: 100px; }
+  .anasayfa-shape.shape4 { width: 60px; height: 60px; }
+  .anasayfa-shape.shape5 { width: 40px; height: 40px; }
+}
+.anasayfa-bg .container {
+  position: relative;
+  z-index: 2;
+  background: rgba(255,255,255,0.93);
+  border-radius: 22px;
+  box-shadow: 0 4px 32px 0 #ffc75f33;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+.anasayfa-bg .urun-listesi {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+}
+@media (max-width: 900px) {
+  .anasayfa-bg .urun-listesi { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .anasayfa-bg .urun-listesi { grid-template-columns: 1fr; }
+}
+</style>
 {% endblock %}

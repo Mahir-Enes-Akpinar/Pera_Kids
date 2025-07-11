@@ -5,21 +5,20 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # AuthenticationForm'u ekliyoruz
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm 
-# Create your views here.
 
-# playground/views.py
 
-# ...diğer importlarınız...
-from .models import Product, ProductColor, UserProfile, ProductImage
+
+
 def anasayfa(request):
     """
-    Ana sayfayı gösterir. Satışta olan tüm ürünleri ve her ürünün
-    ana rengine ait ilk resmi ve fiyatı alır.
+    Ana sayfayı gösterir. Satışta olan ve en az bir rengi tanımlanmış
+    tüm ürünleri verimli bir şekilde çeker.
     """
-    # Sadece satışta olan ve en az bir rengi tanımlanmış ürünleri alıyoruz.
-    # 'colors__isnull=False' bir ürüne ait en az bir ProductColor olup olmadığını kontrol eder.
-    # 'distinct()' aynı ürünün birden çok kez listelenmesini engeller.
-    urunler = Product.objects.filter(is_available=True, colors__isnull=False).distinct().order_by('-created_at')
+    # prefetch_related, ilgili tüm renk ve resimleri tek seferde çekerek
+    # veritabanına yüzlerce sorgu atılmasını engeller. Bu, performans için kritiktir.
+    urunler = Product.objects.filter(is_available=True, colors__isnull=False).distinct().prefetch_related(
+        'colors__images'
+    ).order_by('-created_at')
 
     context = {
         'urunler_listesi': urunler
