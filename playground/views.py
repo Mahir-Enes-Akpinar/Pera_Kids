@@ -6,7 +6,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # Aut
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm 
 
-
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 def anasayfa(request):
@@ -29,19 +30,32 @@ def anasayfa(request):
 def urun_detay(request, slug):
     """
     Tek bir ürünün detay sayfasını gösterir.
-    URL'den gelen 'slug' bilgisini kullanarak ilgili ürünü bulur.
+    Ürünü, tüm renk ve resim varyasyonlarıyla birlikte çeker.
     """
-    # get_object_or_404: Belirtilen modelde (Product) ve kriterde (slug=slug)
-    # bir nesne bulmaya çalışır. Eğer bulamazsa, otomatik olarak "404 Sayfa Bulunamadı"
-    # hatası gösterir. Bu, try-except blokları yazmaktan çok daha pratiktir.
-    urun = get_object_or_404(Product, slug=slug, is_available=True)
+    product = get_object_or_404(
+        Product.objects.prefetch_related('colors__images'), 
+        slug=slug, 
+        is_available=True
+    )
+
+    # Renk verilerini JavaScript'e göndermek için hazırlıyoruz
+    colors_data = {}
+    for color in product.colors.all():
+        images_urls = [img.image.url for img in color.images.all()]
+        colors_data[color.id] = {
+            'color_name': color.color_name,
+            'price': color.price,
+            'quantity': color.quantity,
+            'images': images_urls
+        }
 
     context = {
-        'urun_detay_verisi': urun
+        'product': product,
+        # Veriyi JSON formatında şablona güvenli bir şekilde gönderiyoruz
+        'colors_data_json': json.dumps(colors_data, cls=DjangoJSONEncoder)
     }
-
-    # render fonksiyonunu yeni şablonumuz olan urun_detay.html'e yönlendiriyoruz.
     return render(request, 'playground/urun_detay.html', context)
+
 
 @login_required
 def sohbet_baslat(request, product_id):

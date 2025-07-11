@@ -1,180 +1,121 @@
-{% extends "playground/base.html" %} {% load static %} {% block title %}{{
-urun_detay_verisi.name }} - Pera Kids{% endblock %} {% block content %}
-<div class="urun-detay-bg">
-  <!-- Playful animated shapes for extra color -->
-  <div class="urun-detay-shape shape1"></div>
-  <div class="urun-detay-shape shape2"></div>
-  <div class="urun-detay-shape shape3"></div>
-  <div class="urun-detay-shape shape4"></div>
-  <div class="urun-detay-shape shape5"></div>
+{% extends "playground/base.html" %}
+{% load static %}
 
-  <div class="container">
+{% block title %}{{ product.name }} - Pera Kids{% endblock %}
+
+{% block content %}
+<div class="urun-detay-konteyner">
     <div class="urun-detay-grid">
-      <div class="urun-detay-resim">
-        {% if urun_detay_verisi.image %}
-        <img
-          src="{{ urun_detay_verisi.image.url }}"
-          alt="{{ urun_detay_verisi.name }}"
-        />
-        {% else %}
-        <img
-          src="{% static 'playground/img/placeholder.png' %}"
-          alt="Görsel Yok"
-        />
-        {% endif %}
-      </div>
-      <div class="urun-bilgi">
-        <h1 class="main-title" style="font-size: 2.2em; margin-bottom: 10px">
-          {{ urun_detay_verisi.name }}
-        </h1>
-        <div class="fiyat">{{ urun_detay_verisi.price }} TL (Seri Fiyatı)</div>
-        <div class="aciklama">
-          <p>{{ urun_detay_verisi.description|linebreaks }}</p>
-          <p><strong>Yaş Grubu:</strong> {{ urun_detay_verisi.age_group_set }}</p>
-          <p>
-            <strong>Mevcut Renkler:</strong> {{ urun_detay_verisi.available_colors
-            }}
-          </p>
+        <div class="urun-galeri">
+            <div class="ana-resim">
+                {% with main_image=product.get_main_image %}
+                    <img id="mainProductImage" src="{% if main_image %}{{ main_image.image.url }}{% else %}{% static 'playground/img/placeholder.png' %}{% endif %}" alt="{{ product.name }}">
+                {% endwith %}
+            </div>
+            <div class="kucuk-resimler" id="thumbnailContainer">
+                {% with main_color=product.get_main_color %}
+                    {% for image in main_color.images.all %}
+                        <img src="{{ image.image.url }}" class="thumbnail active" onclick="changeMainImage(this, '{{ image.image.url }}')">
+                    {% endfor %}
+                {% endwith %}
+            </div>
         </div>
-        <a
-          href="{% url 'playground:sohbet_baslat' product_id=urun_detay_verisi.id %}"
-          class="contact-button"
-          >Bu ürün Hakkında İletişime Geç</a
-        >
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+        
+        <div class="urun-bilgi">
+            <h1>{{ product.name }}</h1>
+            {% with main_color=product.get_main_color %}
+                <div class="fiyat" id="productPrice">{{ main_color.price }} TL</div>
+                <div class="stok-durumu" id="productStock">
+                    {% if main_color.quantity > 0 %}
+                        Stokta: {{ main_color.quantity }} adet
+                    {% else %}
+                        Stokta Yok
+                    {% endif %}
+                </div>
+            {% endwith %}
 
-{% block extra_css %}
-<style>
-.urun-detay-bg {
-  position: relative;
-  min-height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background: linear-gradient(120deg, #ffc75f 0%, #a1c4fd 40%, #ff9671 70%, #ff6f91 100%);
-  animation: bgMove 18s ease-in-out infinite alternate;
+            <div class="detay-renk-secenekleri">
+                <p><strong>Renk Seçenekleri:</strong></p>
+                <div class="renkler">
+                    {% for color in product.colors.all %}
+                        <button 
+                            class="renk-butonu {% if color.is_main_color %}active{% endif %}" 
+                            style="background-color: {{ color.color_name|lower }};"
+                            title="{{ color.color_name }}"
+                            onclick="selectColor(this, {{ color.id }})">
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="aciklama">
+                <p>{{ product.description|linebreaks }}</p>
+                <p><strong>Yaş Grubu:</strong> {{ product.age_group_set }}</p>
+            </div>
+
+            <a href="{% url 'playground:sohbet_baslat' product_id=product.id %}" class="contact-button">Bu Ürün Hakkında İletişime Geç</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// View'dan gelen JSON verisini JavaScript nesnesine çeviriyoruz
+const colorsData = JSON.parse('{{ colors_data_json|escapejs }}');
+
+const mainImage = document.getElementById('mainProductImage');
+const thumbnailContainer = document.getElementById('thumbnailContainer');
+const productPrice = document.getElementById('productPrice');
+const productStock = document.getElementById('productStock');
+
+function changeMainImage(element, imageUrl) {
+    mainImage.src = imageUrl;
+    // Aktif thumbnail stilini ayarla
+    document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+    element.classList.add('active');
 }
-.urun-detay-shape {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.22;
-  filter: blur(2px);
-  z-index: 1;
-  animation: floatShape 12s infinite ease-in-out alternate;
+
+function selectColor(element, colorId) {
+    const selectedColor = colorsData[colorId];
+    if (!selectedColor) return;
+
+    // Ana resmi, fiyatı ve stok bilgilerini güncelle
+    if (selectedColor.images.length > 0) {
+        mainImage.src = selectedColor.images[0];
+    } else {
+        mainImage.src = "{% static 'playground/img/placeholder.png' %}";
+    }
+    
+    productPrice.textContent = `${selectedColor.price} TL`;
+    if (selectedColor.quantity > 0) {
+        productStock.textContent = `Stokta: ${selectedColor.quantity} adet`;
+    } else {
+        productStock.textContent = 'Stokta Yok';
+    }
+
+    // Küçük resim (thumbnail) galerisini güncelle
+    thumbnailContainer.innerHTML = ''; // Mevcut küçük resimleri temizle
+    selectedColor.images.forEach(imageUrl => {
+        const thumb = document.createElement('img');
+        thumb.src = imageUrl;
+        thumb.className = 'thumbnail';
+        thumb.onclick = () => changeMainImage(thumb, imageUrl);
+        thumbnailContainer.appendChild(thumb);
+    });
+    // İlk küçük resmi aktif yap
+    if (thumbnailContainer.firstChild) {
+        thumbnailContainer.firstChild.classList.add('active');
+    }
+    
+    // Aktif buton stilini ayarla
+    document.querySelectorAll('.renk-butonu').forEach(button => button.classList.remove('active'));
+    element.classList.add('active');
 }
-.urun-detay-shape.shape1 { background: #ffc75f; width: 180px; height: 180px; left: 6vw; top: 8vh; animation-delay: 0s; }
-.urun-detay-shape.shape2 { background: #a1c4fd; width: 120px; height: 120px; right: 8vw; top: 18vh; animation-delay: 2s; }
-.urun-detay-shape.shape3 { background: #ff6f91; width: 140px; height: 140px; left: 22vw; bottom: 10vh; animation-delay: 4s; }
-.urun-detay-shape.shape4 { background: #ff9671; width: 90px; height: 90px; right: 18vw; bottom: 8vh; animation-delay: 1s; }
-.urun-detay-shape.shape5 { background: #ffc75f; width: 60px; height: 60px; left: 50vw; top: 60vh; animation-delay: 3s; }
-@media (max-width: 900px) {
-  .urun-detay-shape.shape1 { width: 100px; height: 100px; }
-  .urun-detay-shape.shape2 { width: 60px; height: 60px; }
-  .urun-detay-shape.shape3 { width: 80px; height: 80px; }
-  .urun-detay-shape.shape4 { width: 40px; height: 40px; }
-  .urun-detay-shape.shape5 { width: 30px; height: 30px; }
-}
-.urun-detay-bg .container {
-  position: relative;
-  z-index: 2;
-  background: rgba(255,255,255,0.93);
-  border-radius: 22px;
-  box-shadow: 0 4px 32px 0 #ffc75f33;
-  padding-top: 32px;
-  padding-bottom: 32px;
-}
-.urun-detay-grid {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.urun-detay-resim {
-  flex: 0 0 340px;
-  max-width: 340px;
-  background: linear-gradient(135deg, #fff6fb 0%, #e3f6fd 100%);
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  margin-bottom: 18px;
-  border: 2.5px solid var(--accent-color);
-}
-.urun-detay-resim img {
-  width: 100%;
-  max-width: 260px;
-  max-height: 320px;
-  object-fit: contain;
-  border-radius: 12px;
-  background: #fff;
-}
-.urun-bilgi {
-  flex: 1 1 320px;
-  min-width: 0;
-  background: none;
-  padding: 12px 0 12px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.urun-bilgi .main-title {
-  font-size: 2.2em;
-  margin-bottom: 10px;
-  color: var(--primary-color);
-  text-shadow: 0 1px 0 #fff, 0 2px 8px #ffc75f33;
-}
-.fiyat {
-  font-size: 1.3em;
-  color: var(--secondary-color);
-  font-weight: 700;
-  margin-bottom: 18px;
-}
-.aciklama {
-  font-size: 1.08em;
-  color: var(--text-color);
-  margin-bottom: 18px;
-}
-.contact-button {
-  margin-top: auto;
-  padding: 14px 28px;
-  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  color: var(--white-color);
-  border-radius: 12px;
-  font-weight: 700;
-  text-align: center;
-  font-size: 1.13em;
-  box-shadow: 0 2px 10px 0 #ff967133;
-  letter-spacing: 0.5px;
-  border: none;
-  transition: background 0.2s, transform 0.18s;
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-}
-.contact-button::after {
-  content: '📩';
-  color: var(--accent-color);
-  font-size: 1.1em;
-  margin-left: 10px;
-  vertical-align: middle;
-  transition: transform 0.2s;
-  display: inline-block;
-}
-.contact-button:hover::after {
-  transform: scale(1.3) rotate(-10deg);
-}
-.contact-button:hover {
-  background: var(--secondary-color);
-}
-@media (max-width: 900px) {
-  .urun-detay-grid { flex-direction: column; align-items: stretch; gap: 24px; }
-  .urun-detay-resim { margin-bottom: 0; }
-}
-</style>
+
+// Sayfa yüklendiğinde ilk thumbnail'i aktif yap
+document.addEventListener('DOMContentLoaded', () => {
+    if (thumbnailContainer.firstChild) {
+        thumbnailContainer.firstChild.classList.add('active');
+    }
+});
+</script>
 {% endblock %}

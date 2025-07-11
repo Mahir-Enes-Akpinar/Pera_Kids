@@ -486,3 +486,55 @@ body::before {
 @media (max-width: 600px) {
   .anasayfa-bg .urun-listesi { grid-template-columns: 1fr !important; }
 }
+
+/* -- ÜRÜN DETAY SAYFASI GALERİ STİLLERİ -- */
+.urun-galeri .ana-resim {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+.urun-galeri .ana-resim img {
+    width: 100%;
+    display: block;
+}
+.kucuk-resimler {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+.kucuk-resimler .thumbnail {
+    width: 100%;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.kucuk-resimler .thumbnail:hover, .kucuk-resimler .thumbnail.active {
+    border-color: var(--primary-color);
+}
+.detay-renk-secenekleri .renkler {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.renk-butonu {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.renk-butonu:hover {
+    transform: scale(1.1);
+}
+.renk-butonu.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--white-color), 0 0 0 4px var(--primary-color);
+}
+.stok-durumu {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 20px;
+}
