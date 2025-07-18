@@ -1,0 +1,128 @@
+/* ======================================== */
+/* SOHBET SAYFALARI BİLEŞENLERİ           */
+/* ======================================== */
+
+.sohbet-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Sohbet Listeleme Sayfası (sohbetlerim.html) */
+.sohbet-listesi {
+    list-style: none;
+    padding: 0;
+}
+
+.sohbet-karti {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
+}
+
+.sohbet-karti:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.sohbet-karti img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.sohbet-detay h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+}
+
+.sohbet-detay p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #777;
+}
+
+a.sohbet-link {
+    margin-left: auto;
+    padding: 10px 20px;
+    background: var(--accent-color);
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.hic-sohbet-yok {
+    text-align: center;
+    font-size: 1.2em;
+    color: #777;
+    padding: 50px;
+    background: var(--white-color);
+    border-radius: 12px;
+}
+
+/* Sohbet Detay Sayfası (gelecekteki sohbet_detay.html) */
+.mesajlasma-alani {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--white-color);
+    padding: 20px;
+    height: 60vh;
+    overflow-y: auto; /* Mesajlar artınca kaydırma çubuğu çıkar */
+    display: flex;
+    flex-direction: column;
+}
+
+.mesaj {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.mesaj.gonderen {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-bottom-right-radius: 4px;
+    align-self: flex-end; /* Gönderen mesajları sağda */
+}
+
+.mesaj.alici {
+    background-color: #e9ecef;
+    color: var(--text-color);
+    border-bottom-left-radius: 4px;
+    align-self: flex-start; /* Alıcı mesajları solda */
+}
+
+.mesaj-gonderme-formu {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.mesaj-gonderme-formu textarea {
+    flex-grow: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    resize: none; /* Yeniden boyutlandırmayı engeller */
+    font-family: 'Poppins', sans-serif;
+}
+
+.mesaj-gonderme-formu button {
+    padding: 0 25px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}

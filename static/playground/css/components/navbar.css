@@ -1,0 +1,63 @@
+/* Navigasyon Çubuğu Stilleri */
+.navbar {
+    background: var(--white-color);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.navbar .logo a {
+    font-weight: 700;
+    font-size: 1.6em;
+    color: var(--primary-color);
+}
+.navbar .nav-links a {
+    margin-left: 25px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+.navbar .nav-links a:hover {
+    color: var(--primary-color);
+}
+.navbar .nav-links .nav-user {
+    margin-left: 25px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+logout-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em; /* Diğer linklerle aynı boyutta olması için */
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 25px;
+}
+
+.logout-button:hover {
+    color: var(--primary-color);
+}
+
+.logout-button {
+    background: none; border: none; padding: 0; margin: 0;
+    color: var(--text-color); font-family: 'Poppins', sans-serif;
+    font-size: 1em; /* Diğer linklerle aynı font boyutu */
+    font-weight: 500; cursor: pointer; margin-left: 25px;
+}
+.logout-button:hover {
+    color: var(--primary-color);
+}

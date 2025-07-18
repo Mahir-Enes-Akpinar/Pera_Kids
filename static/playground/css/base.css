@@ -1,0 +1,80 @@
+/* ======================================== */
+/* 1. TEMEL VE GENEL STİLLER                */
+/* ======================================== */
+
+:root {
+    --primary-color: #ff6f91;   /* Canlı Pembe */
+    --secondary-color: #ff9671; /* Tatlı Turuncu */
+    --accent-color: #845ec2;    /* Mor */
+    --light-blue: #a1c4fd;      /* Açık Mavi */
+    --text-color: #2c3e50;      /* Koyu Mavi-Gri */
+    --background-color: #f8f9fa;
+    --white-color: #ffffff;
+    --border-color: #e9ecef;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    /* --- ANİMASYONLU ARKA PLAN KODU --- */
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+}
+
+/* Animasyonun kendisi */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+main {
+    flex: 1; /* Footer'ı sayfanın en altına iter */
+    padding: 40px 20px;
+    /* Okunabilirlik için ana içerik alanına beyaz bir arka plan veriyoruz. */
+    /* Bu, animasyonun yazıları okunmaz hale getirmesini engeller. */
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2.8em;
+    color: var(--text-color);
+    margin-bottom: 40px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+}
+
+/* Daha küçük ekranlarda içeriğin daha iyi görünmesi için */
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+        padding: 20px;
+    }
+}

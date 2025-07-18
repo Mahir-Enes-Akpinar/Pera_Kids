@@ -5,14 +5,18 @@
 
 {% block body_class %}hesap-sayfasi-govde{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'playground/css/components/form.css' %}">
+{% endblock %}
+
 {% block content %}
-<!-- Sadece bir ana container -->
 <div class="hesap-form-konteyner">
     <div class="main-title">Hesap İşlemleri</div>
     <div class="tab-controls">
         <button class="tab-btn active" id="loginTab">Giriş Yap</button>
         <button class="tab-btn" id="signupTab">Kayıt Ol</button>
     </div>
+    
     <div class="form-section active" id="loginSection">
         <form method="post" class="login" autocomplete="off">
             {% csrf_token %}
@@ -20,64 +24,58 @@
                 <div class="form-errors">{{ login_form.non_field_errors }}</div>
             {% endif %}
             <div class="field floating-label-field">
-                <input type="text" name="username" id="login_username" placeholder=" " required autocomplete="username">
+                <input type="text" name="username" id="login_username" placeholder=" " required>
                 <label for="login_username">Kullanıcı Adı</label>
             </div>
             <div class="field floating-label-field">
-                <input type="password" name="password" id="login_password" placeholder=" " required autocomplete="current-password">
+                <input type="password" name="password" id="login_password" placeholder=" " required>
                 <label for="login_password">Şifre</label>
             </div>
             <div class="pass-link"><a href="#">Şifremi Unuttum?</a></div>
             <div class="btn">
-                <input type="submit" name="login_submit" value="Giriş Yap" class="contact-button" style="width:100%;">
+                <input type="submit" name="login_submit" value="Giriş Yap">
             </div>
         </form>
     </div>
+
     <div class="form-section" id="signupSection">
-    <form method="post" class="signup" autocomplete="off">
-        {% csrf_token %}
-        {% if register_form.errors %}
-            <div class="form-errors">{{ register_form.errors }}</div>
-        {% endif %}
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="field floating-label-field">
-                {{ register_form.first_name }}
-                <label for="id_first_name">Ad *</label>
+        <form method="post" class="signup" autocomplete="off">
+            {% csrf_token %}
+            {% if register_form.errors %}
+                <div class="form-errors">{{ register_form.errors }}</div>
+            {% endif %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="field floating-label-field">
+                    {{ register_form.first_name }}
+                    <label for="id_first_name">Ad *</label>
+                </div>
+                <div class="field floating-label-field">
+                    {{ register_form.last_name }}
+                    <label for="id_last_name">Soyad *</label>
+                </div>
             </div>
             <div class="field floating-label-field">
-                {{ register_form.last_name }}
-                <label for="id_last_name">Soyad *</label>
+                {{ register_form.username }}
+                <label for="id_username">Kullanıcı Adı *</label>
             </div>
-        </div>
-
-        <div class="field floating-label-field">
-            {{ register_form.username }}
-            <label for="id_username">Kullanıcı Adı *</label>
-        </div>
-        
-        <div class="field floating-label-field">
-            {{ register_form.email }}
-            <label for="id_email">E-posta Adresi *</label>
-        </div>
-
+            <div class="field floating-label-field">
+                {{ register_form.email }}
+                <label for="id_email">E-posta Adresi *</label>
+            </div>
             <div class="field floating-label-field">
                 {{ register_form.phone_number }}
                 <label for="id_phone_number">Telefon Numarası</label>
             </div>
-
             <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;">
-
             <div class="field floating-label-field">
                 {{ register_form.company_name }}
                 <label for="id_company_name">Firma Adı</label>
             </div>
-        
             <div class="field floating-label-field">
                 {{ register_form.street }}
                 <label for="id_street">Sokak ve Numara</label>
             </div>
-        
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="field floating-label-field">
                     {{ register_form.state }}
@@ -88,14 +86,11 @@
                     <label for="id_city">Şehir / İl</label>
                 </div>
             </div>
-
             <div class="field floating-label-field">
                 {{ register_form.postal_code }}
                 <label for="id_postal_code">Posta Kodu</label>
             </div>
-
             <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;">
-
             <div class="field floating-label-field">
                 {{ register_form.password1 }}
                 <label for="id_password1">Şifre *</label>
@@ -104,33 +99,14 @@
                 {{ register_form.password2 }}
                 <label for="id_password2">Şifreyi Doğrula *</label>
             </div>
-
             <div class="btn">
                 <input type="submit" name="register_submit" value="Kayıt Ol">
             </div>
         </form>
     </div>
 </div>
-
-<script>
-    const loginTab = document.getElementById('loginTab');
-    const signupTab = document.getElementById('signupTab');
-    const loginSection = document.getElementById('loginSection');
-    const signupSection = document.getElementById('signupSection');
-
-    loginTab.onclick = function() {
-        loginTab.classList.add('active');
-        signupTab.classList.remove('active');
-        loginSection.classList.add('active');
-        signupSection.classList.remove('active');
-    };
-    
-    signupTab.onclick = function() {
-        signupTab.classList.add('active');
-        loginTab.classList.remove('active');
-        signupSection.classList.add('active');
-        loginSection.classList.remove('active');
-    };
-</script>
 {% endblock %}
 
+{% block scripts %}
+    <script src="{% static 'playground/js/hesap.js' %}"></script>
+{% endblock %}

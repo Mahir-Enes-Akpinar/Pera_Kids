@@ -25,4 +25,8 @@ urlpatterns = [
     path('hesap/', views.hesap_view, name='hesap'),
 
     path('sohbetlerim/', views.sohbetlerim_view, name='sohbetlerim'),
+
+     # YENİ EKLENECEK SATIR
+     # Bu path, çıkış işlemini yönetecek.
+    path('logout/', auth_views.LogoutView.as_view(next_page='playground:anasayfa'), name='logout'),
 ]

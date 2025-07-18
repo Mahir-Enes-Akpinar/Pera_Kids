@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="urun-karti">
+    <a href="{% url 'playground:urun_detay' product.slug %}">
+        <div class="urun-resim-konteyner">
+            {% with main_image=product.get_main_image %}
+                <img id="product-image-{{ product.id }}" src="{% if main_image %}{{ main_image.image.url }}{% else %}{% static 'playground/img/placeholder.png' %}{% endif %}" alt="{{ product.name }}">
+            {% endwith %}
+        </div>
+    </a>
+    <div class="urun-karti-icerik">
+        <h2><a href="{% url 'playground:urun_detay' product.slug %}">{{ product.name }}</a></h2>
+        
+        <ul class="renk-secenekleri">
+            {% for color in product.colors.all %}
+                {% with color_image=color.images.first %}
+                    {% if color_image %}
+                        <li class="renk-kutusu {% if color.is_main_color %}active{% endif %}"
+                            style="background-color: {{ color.color_name|lower }};"
+                            title="{{ color.color_name }}"
+                            data-image-url="{{ color_image.image.url }}"
+                            data-product-id="{{ product.id }}">
+                        </li>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+
+        {% with main_color=product.get_main_color %}
+            {% if main_color %}
+                <div class="urun-fiyati">{{ main_color.price }} TL</div>
+            {% endif %}
+        {% endwith %}
+        
+        <a href="{% url 'playground:urun_detay' product.slug %}" class="detay-link">Detayları Gör</a>
+    </div>
+</div>

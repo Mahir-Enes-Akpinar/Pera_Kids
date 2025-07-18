@@ -3,6 +3,10 @@
 
 {% block title %}{{ product.name }} - Pera Kids{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'playground/css/pages/urun_detay.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="urun-detay-konteyner">
     <div class="urun-detay-grid">
@@ -15,7 +19,7 @@
             <div class="kucuk-resimler" id="thumbnailContainer">
                 {% with main_color=product.get_main_color %}
                     {% for image in main_color.images.all %}
-                        <img src="{{ image.image.url }}" class="thumbnail active" onclick="changeMainImage(this, '{{ image.image.url }}')">
+                        <img src="{{ image.image.url }}" class="thumbnail" onclick="changeMainImage(this, '{{ image.image.url }}')">
                     {% endfor %}
                 {% endwith %}
             </div>
@@ -26,11 +30,7 @@
             {% with main_color=product.get_main_color %}
                 <div class="fiyat" id="productPrice">{{ main_color.price }} TL</div>
                 <div class="stok-durumu" id="productStock">
-                    {% if main_color.quantity > 0 %}
-                        Stokta: {{ main_color.quantity }} adet
-                    {% else %}
-                        Stokta Yok
-                    {% endif %}
+                    {% if main_color.quantity > 0 %}Stokta: {{ main_color.quantity }} adet{% else %}Stokta Yok{% endif %}
                 </div>
             {% endwith %}
 
@@ -38,12 +38,7 @@
                 <p><strong>Renk Seçenekleri:</strong></p>
                 <div class="renkler">
                     {% for color in product.colors.all %}
-                        <button 
-                            class="renk-butonu {% if color.is_main_color %}active{% endif %}" 
-                            style="background-color: {{ color.color_name|lower }};"
-                            title="{{ color.color_name }}"
-                            onclick="selectColor(this, {{ color.id }})">
-                        </button>
+                        <button class="renk-butonu {% if color.is_main_color %}active{% endif %}" style="background-color: {{ color.color_name|lower }};" title="{{ color.color_name }}" onclick="selectColor(this, {{ color.id }})"></button>
                     {% endfor %}
                 </div>
             </div>
@@ -57,65 +52,19 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<script>
-// View'dan gelen JSON verisini JavaScript nesnesine çeviriyoruz
-const colorsData = JSON.parse('{{ colors_data_json|escapejs }}');
+{% block scripts %}
+    <script>
+        // View'dan gelen JSON verisini JavaScript için global bir değişkene atıyoruz
+        const colorsData = JSON.parse('{{ colors_data_json|escapejs }}');
+    </script>
+    <script src="{% static 'playground/js/urun_detay.js' %}"></script>
+    <script>
+        // Veri yüklendikten sonra galeriyi başlatan fonksiyonu çağırıyoruz
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProductGallery(colorsData);
+        });
+    </script>
 
-const mainImage = document.getElementById('mainProductImage');
-const thumbnailContainer = document.getElementById('thumbnailContainer');
-const productPrice = document.getElementById('productPrice');
-const productStock = document.getElementById('productStock');
-
-function changeMainImage(element, imageUrl) {
-    mainImage.src = imageUrl;
-    // Aktif thumbnail stilini ayarla
-    document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
-    element.classList.add('active');
-}
-
-function selectColor(element, colorId) {
-    const selectedColor = colorsData[colorId];
-    if (!selectedColor) return;
-
-    // Ana resmi, fiyatı ve stok bilgilerini güncelle
-    if (selectedColor.images.length > 0) {
-        mainImage.src = selectedColor.images[0];
-    } else {
-        mainImage.src = "{% static 'playground/img/placeholder.png' %}";
-    }
-    
-    productPrice.textContent = `${selectedColor.price} TL`;
-    if (selectedColor.quantity > 0) {
-        productStock.textContent = `Stokta: ${selectedColor.quantity} adet`;
-    } else {
-        productStock.textContent = 'Stokta Yok';
-    }
-
-    // Küçük resim (thumbnail) galerisini güncelle
-    thumbnailContainer.innerHTML = ''; // Mevcut küçük resimleri temizle
-    selectedColor.images.forEach(imageUrl => {
-        const thumb = document.createElement('img');
-        thumb.src = imageUrl;
-        thumb.className = 'thumbnail';
-        thumb.onclick = () => changeMainImage(thumb, imageUrl);
-        thumbnailContainer.appendChild(thumb);
-    });
-    // İlk küçük resmi aktif yap
-    if (thumbnailContainer.firstChild) {
-        thumbnailContainer.firstChild.classList.add('active');
-    }
-    
-    // Aktif buton stilini ayarla
-    document.querySelectorAll('.renk-butonu').forEach(button => button.classList.remove('active'));
-    element.classList.add('active');
-}
-
-// Sayfa yüklendiğinde ilk thumbnail'i aktif yap
-document.addEventListener('DOMContentLoaded', () => {
-    if (thumbnailContainer.firstChild) {
-        thumbnailContainer.firstChild.classList.add('active');
-    }
-});
-</script>
 {% endblock %}
